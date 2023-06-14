@@ -11,22 +11,21 @@ export default class UserService {
     private tokenGenerator: TokenGeneratorJwt,
   ) {}
 
-    public async login(email: string, password: string): Promise<ServiceResponse<{ token: string }>> {
-        const user = await this.userModel.findByEmail(email);
+  public async login(email: string, password: string): Promise<ServiceResponse<{ token: string }>> {
+    const user = await this.userModel.findByEmail(email);
 
-        if(!user) {
-            return { status: 'UNAUTHORIZED', data: { message: 'Invalid email or password' } };
-        }
-        
-        const isValid = await this.encrypter.compare(password, user.password);
-
-        if(!isValid) {
-            return { status: 'UNAUTHORIZED', data: { message: 'Invalid email or password' } };
-        };
-
-        const token = this.tokenGenerator.generate(user);
-
-        return { status: 'SUCCESSFUL', data: { token }}
+    if (!user) {
+      return { status: 'UNAUTHORIZED', data: { message: 'Invalid email or password' } };
     }
 
+    const isValid = await this.encrypter.compare(password, user.password);
+
+    if (!isValid) {
+      return { status: 'UNAUTHORIZED', data: { message: 'Invalid email or password' } };
+    }
+
+    const token = this.tokenGenerator.generate(user);
+
+    return { status: 'SUCCESSFUL', data: { token } };
+  }
 }

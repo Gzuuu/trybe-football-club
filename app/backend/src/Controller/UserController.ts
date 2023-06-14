@@ -10,16 +10,17 @@ const tokenGenerator = new TokenGeneratorJwt();
 
 export default class UserController {
   constructor(
-    private userService = new UserService(userModel,encrypter,tokenGenerator),
+    private userService = new UserService(userModel, encrypter, tokenGenerator),
   ) {}
-    public async login(req: Request, res: Response) {
-        const { email, password } = req.body;
-        const serviceResponse = await this.userService.login(email, password);
 
-        if(serviceResponse.status === 'UNAUTHORIZED') {
-            return res.status(401).json(serviceResponse.data);
-        }
+  public async login(req: Request, res: Response) {
+    const { email, password } = req.body;
+    const serviceResponse = await this.userService.login(email, password);
 
-        return res.status(200).json(serviceResponse.data);
+    if (serviceResponse.status === 'UNAUTHORIZED') {
+      return res.status(401).json(serviceResponse.data);
     }
+
+    return res.status(200).json(serviceResponse.data);
+  }
 }

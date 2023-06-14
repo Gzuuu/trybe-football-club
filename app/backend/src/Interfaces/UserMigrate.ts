@@ -1,4 +1,4 @@
-import { ID } from "./ICRUDModel";
+import { ID } from './ICRUDModel';
 
 export interface IUser {
   id: number,
@@ -11,6 +11,6 @@ export interface IUser {
 export interface UserReader<T> {
   findById(id: ID): Promise<T | null>,
   findByEmail(email: string): Promise<T | null>
-} 
+}
 
 export type IUserModel = UserReader<IUser>;
