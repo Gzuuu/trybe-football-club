@@ -4,20 +4,31 @@ import { ServiceResponse } from '../Interfaces/ServiceResponse';
 import { IUser, IUserModel } from '../Interfaces/UserMigrate';
 import UserModel from '../models/UserModel';
 import TokenGeneratorJwt from '../Utils/tokenGenerator';
-
-const encrypter = new EncrypterBcryptService();
-const generateToken = new TokenGeneratorJwt();
+import { Encrypter } from '../Interfaces/Encrypter';
 
 export default class UserService {
   constructor(
     private userModel: IUserModel = new UserModel(),
+    private encrypter: Encrypter,
+    private tokenGenerator: TokenGeneratorJwt,
   ) {}
 
-  private async getUserById(id: ID): Promise<ServiceResponse<IUser>> {
-    const user = await this.userModel.findById(id);
-     if (!user) return { status: 'NOT_FOUND', data: { message: 'Invalid email or password '} }
+    public async login(email: string, password: string): Promise<ServiceResponse<{ token: string }>> {
+        const user = await this.userModel.findByEmail(email);
 
-     return { status: 'SUCCESSFUL', data: user }
+        if(!user) {
+            return { status: 'UNAUTHORIZED', data: { message: 'Email or password invalid' } };
+        }
+        
+        const isValid = await this.encrypter.compare(password, user.password);
+
+        if(!isValid) {
+            return { status: 'UNAUTHORIZED', data: { message: 'Email or password invalid' } };
+        };
+
+        const token = this.tokenGenerator.generate(user);
+
+        return { status: 'SUCCESSFUL', data: { token }}
     }
 
 }
