@@ -10,6 +10,7 @@ export interface IUser {
 
 export interface UserReader<T> {
   findById(id: ID): Promise<T | null>,
+  findByEmail(email: string, password: string): Promise<T | null>
 } 
 
 export type IUserModel = UserReader<IUser>;

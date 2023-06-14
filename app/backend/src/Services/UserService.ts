@@ -13,10 +13,11 @@ export default class UserService {
     private userModel: IUserModel = new UserModel(),
   ) {}
 
-  private async getUserById(id: ID): Promise<ServiceResponse<IUser | null>> {
+  private async getUserById(id: ID): Promise<ServiceResponse<IUser>> {
     const user = await this.userModel.findById(id);
      if (!user) return { status: 'NOT_FOUND', data: { message: 'Invalid email or password '} }
 
      return { status: 'SUCCESSFUL', data: user }
     }
+
 }
