@@ -8,6 +8,8 @@ export interface IUser {
   password: string,
 }
 
-export interface IUserModel<T> {
+export interface UserReader<T> {
   findById(id: ID): Promise<T | null>,
 } 
+
+export type IUserModel = UserReader<IUser>;
