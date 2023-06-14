@@ -13,4 +13,4 @@ export default class EncrypterBcryptService implements Encrypter {
     const isValid = await this.bcrypt.compare(password, hash);
     return isValid;
   }
-} 
+}
