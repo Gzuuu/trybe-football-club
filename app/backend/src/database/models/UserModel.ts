@@ -46,8 +46,9 @@ SequelizeUserModel.init({
   },
 }, {
   sequelize: db,
-  modelName: 'SequelizeUserModelModel',
+  modelName: 'SequelizeUserModel',
   timestamps: false,
+  tableName: 'users',
 });
 
 export default SequelizeUserModel;

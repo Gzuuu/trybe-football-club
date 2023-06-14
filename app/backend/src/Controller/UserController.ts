@@ -8,7 +8,7 @@ const userModel = new UserModel();
 const encrypter = new EncrypterBcryptService();
 const tokenGenerator = new TokenGeneratorJwt();
 
-export default class TeamController {
+export default class UserController {
   constructor(
     private userService = new UserService(userModel,encrypter,tokenGenerator),
   ) {}
@@ -20,6 +20,6 @@ export default class TeamController {
             return res.status(401).json(serviceResponse.data);
         }
 
-        res.status(200).json(serviceResponse.data);
+        return res.status(200).json(serviceResponse.data);
     }
 }

@@ -1,14 +1,12 @@
-import EncrypterBcryptService from '../Utils/EncrypterBcrypt';
-import { ID } from '../Interfaces/ICRUDModel';
 import { ServiceResponse } from '../Interfaces/ServiceResponse';
-import { IUser, IUserModel } from '../Interfaces/UserMigrate';
+import { IUserModel } from '../Interfaces/UserMigrate';
 import UserModel from '../models/UserModel';
 import TokenGeneratorJwt from '../Utils/tokenGenerator';
 import { Encrypter } from '../Interfaces/Encrypter';
 
 export default class UserService {
   constructor(
-    private userModel: IUserModel,
+    private userModel: IUserModel = new UserModel(),
     private encrypter: Encrypter,
     private tokenGenerator: TokenGeneratorJwt,
   ) {}

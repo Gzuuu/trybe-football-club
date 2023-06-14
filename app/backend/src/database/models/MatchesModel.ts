@@ -57,6 +57,7 @@ MatchModel.init({
   modelName: 'MatchModel',
   timestamps: false,
   underscored: true,
+  tableName: 'matches',
 });
 
 TeamModel.belongsTo(MatchModel, { foreignKey: 'id', as: 'Hteam' });
