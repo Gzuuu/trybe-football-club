@@ -6,7 +6,7 @@ export default class TokenGeneratorJwt implements TokenGenerator {
   private jwt = jwt;
 
   generate(user: IUser): string {
-    const token = this.jwt.sign({ id: user.id }, 'SECRET');
+    const token = this.jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'jwt_secret');
     return token;
   }
 

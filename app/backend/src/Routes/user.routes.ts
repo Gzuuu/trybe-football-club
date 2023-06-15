@@ -1,22 +1,21 @@
-import { Request, Router, Response, NextFunction } from 'express';
+import { Request, Router, Response } from 'express';
 import UserController from '../Controller/UserController';
 import Validations from '../Middlewares/Validations';
 
 const userController = new UserController();
-const loginBody = ['email', 'password'];
-const validate = new Validations(loginBody);
 
 const router = Router();
 
 router.post(
   '/',
-  (req: Request, res: Response, next: NextFunction) => validate.validateUser(req, res, next),
+  Validations.validateFields,
+  Validations.validateEmail,
   (req: Request, res: Response) => userController.login(req, res),
 );
 
 router.get(
   '/role',
-  (req: Request, res: Response, next: NextFunction) => Validations.validateToken(req, res, next),
+  Validations.validateToken,
   (req: Request, res: Response) => userController.findRole(req, res),
 );
 

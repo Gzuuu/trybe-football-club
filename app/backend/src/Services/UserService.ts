@@ -30,7 +30,7 @@ export default class UserService {
   }
 
   public async findRole(token: string): Promise<ServiceResponse<{ role: string }>> {
-    const userInfo = this.tokenGenerator.verify(token, process.env.JWT_TOKEN || 'SECRET');
+    const userInfo = this.tokenGenerator.verify(token, process.env.JWT_TOKEN || 'jwt_secret');
     const user = await this.userModel.findRole(userInfo.id);
 
     if (user === null) {
