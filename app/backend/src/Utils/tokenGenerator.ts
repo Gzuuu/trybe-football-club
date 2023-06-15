@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import { IUser } from '../Interfaces/UserMigrate';
-import { TokenGenerator } from '../Interfaces/TokenGenerator';
+import { TokenGenerator, tokenPayload } from '../Interfaces/TokenGenerator';
 
 export default class TokenGeneratorJwt implements TokenGenerator {
   private jwt = jwt;
@@ -9,4 +9,10 @@ export default class TokenGeneratorJwt implements TokenGenerator {
     const token = this.jwt.sign({ id: user.id }, 'SECRET');
     return token;
   }
+
+  verify(token: string, secret: string): tokenPayload {
+    const user = this.jwt.verify(token, secret = 'SECRET') as tokenPayload;
+    return user;
+  }
+
 }

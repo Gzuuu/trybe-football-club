@@ -1,5 +1,8 @@
 import SequelizeUserModel from '../database/models/UserModel';
-import { IUser, IUserModel } from '../Interfaces/UserMigrate';
+import { IUser, IUserModel, role } from '../Interfaces/UserMigrate';
+import TokenGeneratorJwt from '../Utils/tokenGenerator';
+
+const tokenGenerator = new TokenGeneratorJwt();
 
 export default class UserModel implements IUserModel {
   private model = SequelizeUserModel;
@@ -20,5 +23,17 @@ export default class UserModel implements IUserModel {
       username: user.username,
       password: user.password,
     };
+  }
+
+  async findRole(token: string): Promise<role | null> {
+    const userInfo = tokenGenerator.verify(token, process.env.JWT_SECRET || 'SECRET');
+
+    if(!userInfo.id) return null;
+
+    const user = await this.findById(userInfo.id);
+
+    if(!user) return null;
+
+    return user.role;
   }
 }
