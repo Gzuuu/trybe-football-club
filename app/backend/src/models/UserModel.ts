@@ -1,3 +1,4 @@
+import { ID } from '../Interfaces/ICRUDModel';
 import SequelizeUserModel from '../database/models/UserModel';
 import { IUser, IUserModel, role } from '../Interfaces/UserMigrate';
 import TokenGeneratorJwt from '../Utils/tokenGenerator';
@@ -7,7 +8,7 @@ const tokenGenerator = new TokenGeneratorJwt();
 export default class UserModel implements IUserModel {
   private model = SequelizeUserModel;
 
-  public async findById(id: number): Promise<IUser | null> {
+  private async findById(id: number): Promise<IUser | null> {
     return this.model.findByPk(id);
   }
 
@@ -25,13 +26,8 @@ export default class UserModel implements IUserModel {
     };
   }
 
-  async findRole(token: string): Promise<role | null> {
-    const userInfo = tokenGenerator.verify(token, process.env.JWT_SECRET || 'SECRET');
-
-    if(!userInfo.id) return null;
-
-    const user = await this.findById(userInfo.id);
-
+  async findRole(id: ID): Promise<role | null> {
+    const user = await this.findById(id);
     if(!user) return null;
 
     return user.role;

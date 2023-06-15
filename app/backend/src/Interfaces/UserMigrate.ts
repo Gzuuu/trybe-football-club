@@ -11,9 +11,8 @@ export interface IUser {
 export type role = string;
 
 export interface UserReader<T> {
-  findById(id: ID): Promise<T | null>,
   findByEmail(email: string): Promise<T | null>
-  findRole(token: string): Promise<T | null>
+  findRole(id: ID): Promise<T | null>
 }
 
 export type IUserModel = UserReader<IUser | role>;
