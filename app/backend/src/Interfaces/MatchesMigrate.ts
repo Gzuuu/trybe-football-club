@@ -1,4 +1,7 @@
-export default interface IMatches {
+import { ITeam } from "./TeamMigrates";
+import { ICRUDModelReader } from "./ICRUDModel";
+
+export interface IMatches {
   id: number,
   homeTeamId: number,
   homeTeamGoals: number,
@@ -6,3 +9,10 @@ export default interface IMatches {
   awayTeamGoals: number,
   inProgress: boolean
 }
+
+export interface IMatchesModel extends IMatches {
+  homeTeam: Pick<ITeam, 'teamName'>,
+  awayTeam: Pick<ITeam, 'teamName'>,
+}
+
+export type IMatchModelType = ICRUDModelReader<IMatches>

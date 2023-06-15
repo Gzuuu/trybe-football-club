@@ -8,10 +8,10 @@ import {
 import db from '.';
 // import OtherModel from './OtherModel';
 
-import TeamModel from './TeamModel';
+import SequelizeTeamModel from './TeamModel';
 
-class MatchModel extends Model<InferAttributes<MatchModel>,
-InferCreationAttributes<MatchModel>> {
+class SequelizeMatchModel extends Model<InferAttributes<SequelizeMatchModel>,
+InferCreationAttributes<SequelizeMatchModel>> {
   declare id: CreationOptional<number>;
 
   declare homeTeamId: number;
@@ -25,7 +25,7 @@ InferCreationAttributes<MatchModel>> {
   declare inProgress: boolean;
 }
 
-MatchModel.init({
+SequelizeMatchModel.init({
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -60,11 +60,8 @@ MatchModel.init({
   tableName: 'matches',
 });
 
-TeamModel.belongsTo(MatchModel, { foreignKey: 'id', as: 'Hteam' });
-TeamModel.belongsTo(MatchModel, { foreignKey: 'id', as: 'Ateam' });
-
-MatchModel.hasMany(TeamModel, { foreignKey: 'home_team_id', as: 'homeTeam' });
-MatchModel.hasMany(TeamModel, { foreignKey: 'away_team_id', as: 'awayTeam' });
+SequelizeMatchModel.belongsTo(SequelizeTeamModel, { foreignKey: 'home_team_id', as: 'homeTeam' });
+SequelizeMatchModel.belongsTo(SequelizeTeamModel, { foreignKey: 'away_team_id', as: 'awayTeam' });
 
 /**
     * `Workaround` para aplicar as associations em TS:
@@ -77,4 +74,4 @@ MatchModel.hasMany(TeamModel, { foreignKey: 'away_team_id', as: 'awayTeam' });
 // Example.hasMany(OtherModel, { foreignKey: 'campoC', as: 'campoEstrangeiroC' });
 // Example.hasMany(OtherModel, { foreignKey: 'campoD', as: 'campoEstrangeiroD' });
 
-export default MatchModel;
+export default SequelizeMatchModel;
