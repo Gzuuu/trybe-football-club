@@ -14,4 +14,10 @@ router.post(
   (req: Request, res: Response) => userController.login(req, res),
 );
 
+router.get(
+  '/role',
+  (req: Request, res: Response, next: NextFunction) => Validations.validateToken(req, res, next),
+  (req: Request, res: Response) => userController.findRole(req, res),
+);
+
 export default router;

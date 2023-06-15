@@ -11,8 +11,7 @@ export default class TokenGeneratorJwt implements TokenGenerator {
   }
 
   verify(token: string, secret: string): tokenPayload {
-    const user = this.jwt.verify(token, secret = 'SECRET') as tokenPayload;
+    const user = this.jwt.verify(token, secret) as tokenPayload;
     return user;
   }
-
 }

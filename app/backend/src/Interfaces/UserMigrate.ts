@@ -8,11 +8,9 @@ export interface IUser {
   password: string,
 }
 
-export type role = string;
-
 export interface UserReader<T> {
   findByEmail(email: string): Promise<T | null>
-  findRole(id: ID): Promise<T | null>
+  findRole(id: ID): Promise<Partial<T> | null>
 }
 
-export type IUserModel = UserReader<IUser | role>;
+export type IUserModel = UserReader<IUser>;

@@ -23,4 +23,16 @@ export default class UserController {
 
     return res.status(200).json(serviceResponse.data);
   }
+
+  public async findRole(req: Request, res: Response) {
+    const token = req.headers.authorization as string;
+
+    const serviceResponse = await this.userService.findRole(token);
+
+    if (serviceResponse.status !== 'SUCCESSFUL') {
+      return res.status(401).json(serviceResponse.data);
+    }
+
+    return res.status(200).json(serviceResponse.data);
+  }
 }

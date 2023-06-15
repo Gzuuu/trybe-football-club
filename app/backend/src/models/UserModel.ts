@@ -1,9 +1,6 @@
 import { ID } from '../Interfaces/ICRUDModel';
 import SequelizeUserModel from '../database/models/UserModel';
-import { IUser, IUserModel, role } from '../Interfaces/UserMigrate';
-import TokenGeneratorJwt from '../Utils/tokenGenerator';
-
-const tokenGenerator = new TokenGeneratorJwt();
+import { IUser, IUserModel } from '../Interfaces/UserMigrate';
 
 export default class UserModel implements IUserModel {
   private model = SequelizeUserModel;
@@ -26,10 +23,10 @@ export default class UserModel implements IUserModel {
     };
   }
 
-  async findRole(id: ID): Promise<role | null> {
+  async findRole(id: ID): Promise<Pick<IUser, 'role'> | null> {
     const user = await this.findById(id);
-    if(!user) return null;
+    if (!user) return null;
 
-    return user.role;
+    return { role: user.role };
   }
 }

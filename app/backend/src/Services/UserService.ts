@@ -28,4 +28,15 @@ export default class UserService {
 
     return { status: 'SUCCESSFUL', data: { token } };
   }
+
+  public async findRole(token: string): Promise<ServiceResponse<{ role: string }>> {
+    const userInfo = this.tokenGenerator.verify(token, process.env.JWT_TOKEN || 'SECRET');
+    const user = await this.userModel.findRole(userInfo.id);
+
+    if (user === null) {
+      return { status: 'NOT_FOUND', data: { message: 'Token must be a valid token' } };
+    }
+
+    return { status: 'SUCCESSFUL', data: { role: user.role as string } };
+  }
 }
