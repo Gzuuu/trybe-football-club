@@ -1,5 +1,5 @@
-import { ITeam } from "./TeamMigrates";
-import { ICRUDModelReader } from "./ICRUDModel";
+import { ITeam } from './TeamMigrates';
+import { ICRUDModelReader } from './ICRUDModel';
 
 export interface IMatches {
   id: number,
@@ -15,4 +15,4 @@ export interface IMatchesModel extends IMatches {
   awayTeam: Pick<ITeam, 'teamName'>,
 }
 
-export type IMatchModelType = ICRUDModelReader<IMatches>
+export type IMatchModelType = ICRUDModelReader<IMatches>;

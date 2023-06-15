@@ -60,8 +60,8 @@ SequelizeMatchModel.init({
   tableName: 'matches',
 });
 
-SequelizeMatchModel.belongsTo(SequelizeTeamModel, { foreignKey: 'home_team_id', as: 'homeTeam' });
-SequelizeMatchModel.belongsTo(SequelizeTeamModel, { foreignKey: 'away_team_id', as: 'awayTeam' });
+SequelizeMatchModel.belongsTo(SequelizeTeamModel, { foreignKey: 'homeTeamId', as: 'homeTeam' });
+SequelizeMatchModel.belongsTo(SequelizeTeamModel, { foreignKey: 'awayTeamId', as: 'awayTeam' });
 
 /**
     * `Workaround` para aplicar as associations em TS:
