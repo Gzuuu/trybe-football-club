@@ -19,4 +19,21 @@ export default class MatchController {
 
     res.status(200).json(serviceResponse.data);
   }
+
+  public async finishMatch(req: Request, res: Response) {
+    const id = Number(req.params.id);
+    const token = String(req.headers.authorization);
+
+    const serviceResponse = await this.matchService.updateMatch(id, token);
+
+    if (serviceResponse.status === 'UNAUTHORIZED') {
+      return res.status(401).json(serviceResponse.data);
+    }
+
+    if (serviceResponse.status === 'NOT_FOUND') {
+      return res.status(400).json(serviceResponse.data);
+    }
+
+    return res.status(200).json(serviceResponse.data);
+  }
 }

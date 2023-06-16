@@ -1,5 +1,5 @@
 import { ITeam } from './TeamMigrates';
-import { ICRUDModelReader } from './ICRUDModel';
+import { ICRUDModelReader, ICRUDModelUpdater } from './ICRUDModel';
 
 export interface IMatches {
   id: number,
@@ -19,4 +19,4 @@ export interface IReaderMatchType extends ICRUDModelReader<IMatches> {
   findInProgress(bool: boolean): Promise<IMatches[]>;
 }
 
-export type IMatchModelType = IReaderMatchType;
+export type IMatchModelType = IReaderMatchType & ICRUDModelUpdater<IMatches>;

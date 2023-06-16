@@ -25,7 +25,7 @@ export default class UserController {
   }
 
   public async findRole(req: Request, res: Response) {
-    const token = req.headers.authorization as string;
+    const token = String(req.headers.authorization);
 
     const serviceResponse = await this.userService.findRole(token);
 

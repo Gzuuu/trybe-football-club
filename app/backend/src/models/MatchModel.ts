@@ -29,4 +29,12 @@ export default class MatchModel implements IMatchModelType {
 
     return data;
   }
+
+  async update(id: number): Promise<IMatches | null> {
+    await this.model.update({ inProgress: false }, { where: { id } });
+
+    const updatedMatch = this.findById(id);
+
+    return updatedMatch;
+  }
 }
