@@ -15,4 +15,8 @@ export interface IMatchesModel extends IMatches {
   awayTeam: Pick<ITeam, 'teamName'>,
 }
 
-export type IMatchModelType = ICRUDModelReader<IMatches>;
+export interface IReaderMatchType extends ICRUDModelReader<IMatches> {
+  findInProgress(bool: boolean): Promise<IMatches[]>;
+}
+
+export type IMatchModelType = IReaderMatchType;
