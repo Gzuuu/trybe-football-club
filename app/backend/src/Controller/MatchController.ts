@@ -60,21 +60,27 @@ export default class MatchController {
   }
 
   public async createMatch(req: Request, res: Response) {
-    const data = { 
+    const data = {
       homeTeamId: Number(req.body.homeTeamId),
       awayTeamId: Number(req.body.awayTeamId),
       homeTeamGoals: Number(req.body.homeTeamGoals),
       awayTeamGoals: Number(req.body.awayTeamGoals),
-    } as Exclude<IMatches, 'id' | 'inProgress' >
+    } as Exclude<IMatches, 'id' | 'inProgress' >;
 
-    const serviceResponse = await this.matchService.createMatch(data);
+    const token = String(req.headers.authorization);
 
-    if(serviceResponse.status === 'CONFLICT'){
+    const serviceResponse = await this.matchService.createMatch(data, token);
+
+    if (serviceResponse.status === 'CONFLICT') {
       return res.status(404).json(serviceResponse.data);
     }
 
-    if(serviceResponse.status === 'INVALID_DATA'){
+    if (serviceResponse.status === 'INVALID_DATA') {
       return res.status(422).json(serviceResponse.data);
+    }
+
+    if (serviceResponse.status === 'UNAUTHORIZED') {
+      return res.status(401).json(serviceResponse.data);
     }
 
     return res.status(201).json(serviceResponse.data);

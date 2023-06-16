@@ -1,5 +1,5 @@
 import { ITeam } from './TeamMigrates';
-import { ICRUDModelCreator, ICRUDModelReader, ICRUDModelUpdater } from './ICRUDModel';
+import { ICRUDModelReader, ICRUDModelUpdater } from './ICRUDModel';
 
 export interface IMatches {
   id: number,
