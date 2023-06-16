@@ -30,11 +30,17 @@ export default class MatchModel implements IMatchModelType {
     return data;
   }
 
-  async update(id: number): Promise<IMatches | null> {
-    await this.model.update({ inProgress: false }, { where: { id } });
+  async update(id: number, data: Partial<IMatches>): Promise<IMatches | null> {
+    await this.model.update({ ...data }, { where: { id } });
 
     const updatedMatch = this.findById(id);
 
     return updatedMatch;
+  }
+
+  async createMatch(data: Exclude<IMatches, 'id' | 'inProgress'>): Promise<IMatches> {
+    const result = await this.model.create({ ...data, inProgress: true });
+
+    return result;
   }
 }

@@ -26,7 +26,7 @@ export default class MatchService {
     return { status: 'SUCCESSFUL', data: matches };
   }
 
-  public async updateMatch(id: ID, token: string): Promise<ServiceResponse<{ message: string }>> {
+  public async updateMatchResult(id: ID, token: string, data: Partial<IMatches>): Promise<ServiceResponse<{ message: string }>> {
     const match = await this.model.findById(id);
 
     const userInfo = this.tokenGenerator.verify(token, process.env.JWT_TOKEN || 'jwt_secret');
@@ -38,9 +38,25 @@ export default class MatchService {
 
     if (!match) return { status: 'NOT_FOUND', data: { message: 'Match not found' } };
 
-    const data = { inProgress: match.inProgress };
     await this.model.update(match.id, data);
 
     return { status: 'SUCCESSFUL', data: { message: 'Finished' } };
+  }
+
+  public async createMatch(data: Exclude<IMatches, 'id' & 'inProgress'>): Promise<ServiceResponse<IMatches>> {
+    const teamEqual = Number(data.awayTeamId) === Number(data.homeTeamId);
+    const homeTeam = await this.model.findById(Number(data.homeTeamId));
+    const awayTeam = await this.model.findById(Number(data.awayTeamId));
+    const result = await this.model.createMatch(data);
+
+    if(teamEqual){
+      return { status: 'INVALID_DATA', data: { message: 'It is not possible to create a match with two equal teams' } }
+    }
+
+    if(!homeTeam || !awayTeam) {
+      return { status: 'CONFLICT', data: { message: 'There is no team with such id!' } };
+    }
+
+    return { status: 'SUCCESSFUL', data: result };
   }
 }
