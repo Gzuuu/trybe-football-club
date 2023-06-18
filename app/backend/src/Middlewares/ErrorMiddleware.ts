@@ -5,7 +5,7 @@ export default class ErrorMiddleware {
     if (err.name === 'JsonWebTokenError') {
       return res.status(401).json({ message: 'Token must be a valid token' });
     }
-
+    console.error(err);
     return res.status(500).end();
   }
 }

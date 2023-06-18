@@ -5,6 +5,6 @@ export interface LeaderboardType {
   totalVictories: number,
   totalDraws: number,
   totalLosses: number,
-  totalFavor: number,
-  totalOwn: number,
+  goalsFavor: number,
+  goalsOwn: number,
 }
