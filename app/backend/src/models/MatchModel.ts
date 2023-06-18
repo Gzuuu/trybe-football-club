@@ -1,6 +1,6 @@
 import SequelizeTeamModel from '../database/models/TeamModel';
 import SequelizeMatchModel from '../database/models/MatchesModel';
-import { IMatchModelType, IMatches } from '../Interfaces/MatchesMigrate';
+import { IMatchModelType, IMatches, IMatchesModel } from '../Interfaces/MatchesMigrate';
 
 export default class MatchModel implements IMatchModelType {
   private model = SequelizeMatchModel;
@@ -21,13 +21,13 @@ export default class MatchModel implements IMatchModelType {
     return data;
   }
 
-  async findInProgress(bool: boolean): Promise<IMatches[]> {
+  async findInProgress(bool: boolean): Promise<IMatchesModel[]> {
     const data = await this.model.findAll({ include:
       [{ model: SequelizeTeamModel, as: 'homeTeam', attributes: { exclude: ['id'] } },
         { model: SequelizeTeamModel, as: 'awayTeam', attributes: { exclude: ['id'] } }],
     where: { inProgress: bool } });
 
-    return data;
+    return data as unknown as IMatchesModel[];
   }
 
   async update(id: number, data: Partial<IMatches>): Promise<IMatches | null> {
