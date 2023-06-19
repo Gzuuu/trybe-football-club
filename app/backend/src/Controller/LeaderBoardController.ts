@@ -11,4 +11,16 @@ export default class LeaderBoardController {
 
     res.status(200).json(serviceResponse.data);
   }
+
+  async getAwayLeaderboards(_req: Request, res: Response) {
+    const serviceResponse = await this.leaderboardService.leaderboardAwayInfo();
+
+    res.status(200).json(serviceResponse.data);
+  }
+
+  async getLeaderboardInfo(_req: Request, res: Response) {
+    const serviceResponse = await this.leaderboardService.leaderboardInfo();
+
+    res.status(200).json(serviceResponse.data);
+  }
 }
