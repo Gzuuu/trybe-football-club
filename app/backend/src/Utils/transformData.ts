@@ -88,14 +88,14 @@ const incrementHomeTeamResult = (teamsInfo: TeamIncrementType) => {
   } else if (teamsInfo.homeTeamGoals < teamsInfo.awayTeamGoals) {
     team.totalLosses += 1;
     team.goalsFavor += teamsInfo.homeTeamGoals;
-      team.goalsOwn += teamsInfo.awayTeamGoals;
+    team.goalsOwn += teamsInfo.awayTeamGoals;
   } else {
     team.goalsFavor += teamsInfo.homeTeamGoals;
     team.goalsOwn += teamsInfo.awayTeamGoals;
     team.totalPoints += 1;
     team.totalDraws += 1;
   }
-}
+};
 
 const incrementAwayTeamResult = (teamsInfo: TeamIncrementType) => {
   const team = teamsInfo.teams[teamsInfo.awayTeamName];
@@ -108,14 +108,14 @@ const incrementAwayTeamResult = (teamsInfo: TeamIncrementType) => {
     team.totalVictories += 1;
     team.totalPoints += 3;
     team.goalsFavor += teamsInfo.awayTeamGoals;
-      team.goalsOwn += teamsInfo.homeTeamGoals;
+    team.goalsOwn += teamsInfo.homeTeamGoals;
   } else {
     team.goalsFavor += teamsInfo.awayTeamGoals;
     team.goalsOwn += teamsInfo.homeTeamGoals;
     team.totalPoints += 1;
     team.totalDraws += 1;
   }
-}
+};
 
 export const transformHomeTeam = (jogos: IMatchesModel[], team: ITeam[]): LeaderboardType[] => {
   const teams: { [teamName: string]: LeaderboardType } = {};
@@ -129,7 +129,12 @@ export const transformHomeTeam = (jogos: IMatchesModel[], team: ITeam[]): Leader
 
     teams[homeTeamName].totalGames += 1;
 
-    incrementHomeTeamResult({ teams, homeTeamName, homeTeamGoals, awayTeamGoals, awayTeamName: ''})
+    incrementHomeTeamResult({
+      teams,
+      homeTeamName,
+      homeTeamGoals,
+      awayTeamGoals,
+      awayTeamName: '' });
   });
 
   return Object.values(teams);
@@ -147,7 +152,12 @@ export const transformAwayTeam = (jogos: IMatchesModel[], team: ITeam[]): Leader
 
     teams[awayTeamName].totalGames += 1;
 
-    incrementAwayTeamResult({ teams, awayTeamName, awayTeamGoals, homeTeamGoals, homeTeamName: ''})
+    incrementAwayTeamResult({
+      teams,
+      awayTeamName,
+      awayTeamGoals,
+      homeTeamGoals,
+      homeTeamName: '' });
   });
 
   return Object.values(teams);
