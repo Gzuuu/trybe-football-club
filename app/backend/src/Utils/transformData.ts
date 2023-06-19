@@ -1,5 +1,6 @@
 import { IMatchesModel } from '../Interfaces/MatchesMigrate';
 import { LeaderboardType } from '../Interfaces/Leaderboard';
+import { ITeam } from '../Interfaces/TeamMigrates';
 
 interface TeamIncrementType {
   teams: { [teamName: string]: LeaderboardType },
@@ -51,7 +52,7 @@ const generateTeamsIfNotExist = (
   return team;
 };
 
-const transformData = (jogos: IMatchesModel[]): LeaderboardType[] => {
+export const transformData = (jogos: IMatchesModel[]): LeaderboardType[] => {
   const teams: { [teamName: string]: LeaderboardType } = {};
 
   jogos.forEach((jogo) => {
@@ -61,7 +62,6 @@ const transformData = (jogos: IMatchesModel[]): LeaderboardType[] => {
     const { awayTeamGoals } = jogo;
 
     teams[homeTeamName] = generateTeamsIfNotExist(teams, homeTeamName);
-
     teams[awayTeamName] = generateTeamsIfNotExist(teams, awayTeamName);
 
     teams[homeTeamName].totalGames += 1;
@@ -77,4 +77,78 @@ const transformData = (jogos: IMatchesModel[]): LeaderboardType[] => {
   return Object.values(teams);
 };
 
-export default transformData;
+const incrementHomeTeamResult = (teamsInfo: TeamIncrementType) => {
+  const team = teamsInfo.teams[teamsInfo.homeTeamName];
+
+  if (teamsInfo.homeTeamGoals > teamsInfo.awayTeamGoals) {
+    team.goalsFavor += teamsInfo.homeTeamGoals;
+    team.goalsOwn += teamsInfo.awayTeamGoals;
+    team.totalPoints += 3;
+    team.totalVictories += 1;
+  } else if (teamsInfo.homeTeamGoals < teamsInfo.awayTeamGoals) {
+    team.totalLosses += 1;
+    team.goalsFavor += teamsInfo.homeTeamGoals;
+      team.goalsOwn += teamsInfo.awayTeamGoals;
+  } else {
+    team.goalsFavor += teamsInfo.homeTeamGoals;
+    team.goalsOwn += teamsInfo.awayTeamGoals;
+    team.totalPoints += 1;
+    team.totalDraws += 1;
+  }
+}
+
+const incrementAwayTeamResult = (teamsInfo: TeamIncrementType) => {
+  const team = teamsInfo.teams[teamsInfo.awayTeamName];
+
+  if (teamsInfo.homeTeamGoals > teamsInfo.awayTeamGoals) {
+    team.goalsFavor += teamsInfo.awayTeamGoals;
+    team.goalsOwn += teamsInfo.homeTeamGoals;
+    team.totalLosses += 1;
+  } else if (teamsInfo.homeTeamGoals < teamsInfo.awayTeamGoals) {
+    team.totalVictories += 1;
+    team.totalPoints += 3;
+    team.goalsFavor += teamsInfo.awayTeamGoals;
+      team.goalsOwn += teamsInfo.homeTeamGoals;
+  } else {
+    team.goalsFavor += teamsInfo.awayTeamGoals;
+    team.goalsOwn += teamsInfo.homeTeamGoals;
+    team.totalPoints += 1;
+    team.totalDraws += 1;
+  }
+}
+
+export const transformHomeTeam = (jogos: IMatchesModel[], team: ITeam[]): LeaderboardType[] => {
+  const teams: { [teamName: string]: LeaderboardType } = {};
+  const matches = jogos.filter((jogo) => team.map((t) => jogo.homeTeamId === t.id));
+
+  matches.forEach((match) => {
+    const { homeTeamGoals } = match;
+    const { awayTeamGoals } = match;
+    const homeTeamName = match.homeTeam.teamName;
+    teams[homeTeamName] = generateTeamsIfNotExist(teams, homeTeamName);
+
+    teams[homeTeamName].totalGames += 1;
+
+    incrementHomeTeamResult({ teams, homeTeamName, homeTeamGoals, awayTeamGoals, awayTeamName: ''})
+  });
+
+  return Object.values(teams);
+};
+
+export const transformAwayTeam = (jogos: IMatchesModel[], team: ITeam[]): LeaderboardType[] => {
+  const teams: { [teamName: string]: LeaderboardType } = {};
+  const matches = jogos.filter((jogo) => team.map((t) => jogo.awayTeamId === t.id));
+
+  matches.forEach((match) => {
+    const { homeTeamGoals } = match;
+    const { awayTeamGoals } = match;
+    const awayTeamName = match.awayTeam.teamName;
+    teams[awayTeamName] = generateTeamsIfNotExist(teams, awayTeamName);
+
+    teams[awayTeamName].totalGames += 1;
+
+    incrementAwayTeamResult({ teams, awayTeamName, awayTeamGoals, homeTeamGoals, homeTeamName: ''})
+  });
+
+  return Object.values(teams);
+};

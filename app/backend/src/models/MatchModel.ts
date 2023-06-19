@@ -7,7 +7,8 @@ export default class MatchModel implements IMatchModelType {
   async findAll(): Promise<IMatches[]> {
     const data = await this.model.findAll({ include:
             [{ model: SequelizeTeamModel, as: 'homeTeam', attributes: { exclude: ['id'] } },
-              { model: SequelizeTeamModel, as: 'awayTeam', attributes: { exclude: ['id'] } }] });
+              { model: SequelizeTeamModel, as: 'awayTeam', attributes: { exclude: ['id'] } }],
+    raw: true });
 
     return data;
   }

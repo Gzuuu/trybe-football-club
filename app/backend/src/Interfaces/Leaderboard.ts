@@ -8,3 +8,8 @@ export interface LeaderboardType {
   goalsFavor: number,
   goalsOwn: number,
 }
+
+export interface LeaderbordTypeBalance extends LeaderboardType {
+  goalsBalance: number,
+  efficiency: string,
+}
