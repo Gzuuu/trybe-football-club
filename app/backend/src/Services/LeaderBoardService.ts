@@ -1,7 +1,7 @@
 import { LeaderboardType, LeaderbordTypeBalance } from '../Interfaces/Leaderboard';
 import MatchModel from '../models/MatchModel';
 import { ServiceResponse } from '../Interfaces/ServiceResponse';
-import { transformHomeTeam } from '../Utils/transformData';
+import { transformAwayTeam, transformData, transformHomeTeam } from '../Utils/transformData';
 import { ITeamModel } from '../Interfaces/TeamMigrates';
 import TeamModel from '../models/TeamModel';
 
@@ -11,10 +11,27 @@ export default class LeaderBoardService {
     private teamModel: ITeamModel = new TeamModel(),
   ) {}
 
-  async leaderBoardInfo(): Promise<ServiceResponse<LeaderboardType[]>> {
+  async leaderBoardHomeInfo(): Promise<ServiceResponse<LeaderbordTypeBalance[]>> {
     const matches = await this.matchModel.findInProgress(false);
     const teams = await this.teamModel.findAll();
     const leaderboard = transformHomeTeam(matches, teams);
+    const leaderBoardWithEfficiency = LeaderBoardService.makeLeaderboardEfficiency(leaderboard);
+
+    return { status: 'SUCCESSFUL', data: LeaderBoardService.orderTeams(leaderBoardWithEfficiency) };
+  }
+
+  async leaderboardAwayInfo(): Promise<ServiceResponse<LeaderbordTypeBalance[]>> {
+    const matches = await this.matchModel.findInProgress(false);
+    const teams = await this.teamModel.findAll();
+    const leaderboard = transformAwayTeam(matches, teams);
+    const leaderBoardWithEfficiency = LeaderBoardService.makeLeaderboardEfficiency(leaderboard);
+
+    return { status: 'SUCCESSFUL', data: LeaderBoardService.orderTeams(leaderBoardWithEfficiency) };
+  }
+
+  async leaderboardInfo(): Promise<ServiceResponse<LeaderbordTypeBalance[]>> {
+    const matches = await this.matchModel.findInProgress(false);
+    const leaderboard = transformData(matches);
     const leaderBoardWithEfficiency = LeaderBoardService.makeLeaderboardEfficiency(leaderboard);
 
     return { status: 'SUCCESSFUL', data: LeaderBoardService.orderTeams(leaderBoardWithEfficiency) };

@@ -6,8 +6,8 @@ export default class LeaderBoardController {
     private leaderboardService = new LeaderBoardService(),
   ) {}
 
-  async getLeadeboards(_req: Request, res: Response) {
-    const serviceResponse = await this.leaderboardService.leaderBoardInfo();
+  async getHomeLeadeboards(_req: Request, res: Response) {
+    const serviceResponse = await this.leaderboardService.leaderBoardHomeInfo();
 
     res.status(200).json(serviceResponse.data);
   }

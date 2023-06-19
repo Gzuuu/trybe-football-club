@@ -7,7 +7,7 @@ const router = Router();
 
 router.get(
   '/home',
-  (req: Request, res: Response) => leaderboardController.getLeadeboards(req, res),
+  (req: Request, res: Response) => leaderboardController.getHomeLeadeboards(req, res),
 );
 
 export default router;
