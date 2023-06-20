@@ -56,22 +56,23 @@ export const transformData = (jogos: IMatchesModel[]): LeaderboardType[] => {
   const teams: { [teamName: string]: LeaderboardType } = {};
 
   jogos.forEach((jogo) => {
-    const homeTeamName = jogo.homeTeam.teamName;
-    const awayTeamName = jogo.awayTeam.teamName;
-    const { homeTeamGoals } = jogo;
-    const { awayTeamGoals } = jogo;
+    const homeTeamName = jogo.homeTeam?.teamName;
+    const awayTeamName = jogo.awayTeam?.teamName;
+    const { homeTeamGoals, awayTeamGoals } = jogo;
 
-    teams[homeTeamName] = generateTeamsIfNotExist(teams, homeTeamName);
-    teams[awayTeamName] = generateTeamsIfNotExist(teams, awayTeamName);
+    if (homeTeamName && awayTeamName) {
+      teams[homeTeamName] = generateTeamsIfNotExist(teams, homeTeamName);
+      teams[awayTeamName] = generateTeamsIfNotExist(teams, awayTeamName);
 
-    teams[homeTeamName].totalGames += 1;
-    teams[awayTeamName].totalGames += 1;
-    teams[homeTeamName].goalsFavor += homeTeamGoals;
-    teams[awayTeamName].goalsFavor += awayTeamGoals;
-    teams[homeTeamName].goalsOwn += awayTeamGoals;
-    teams[awayTeamName].goalsOwn += homeTeamGoals;
+      teams[homeTeamName].totalGames += 1;
+      teams[awayTeamName].totalGames += 1;
+      teams[homeTeamName].goalsFavor += homeTeamGoals;
+      teams[awayTeamName].goalsFavor += awayTeamGoals;
+      teams[homeTeamName].goalsOwn += awayTeamGoals;
+      teams[awayTeamName].goalsOwn += homeTeamGoals;
 
-    incrementResult({ teams, awayTeamName, homeTeamName, awayTeamGoals, homeTeamGoals });
+      incrementResult({ teams, awayTeamName, homeTeamName, awayTeamGoals, homeTeamGoals });
+    }
   });
 
   return Object.values(teams);
@@ -124,17 +125,19 @@ export const transformHomeTeam = (jogos: IMatchesModel[], team: ITeam[]): Leader
   matches.forEach((match) => {
     const { homeTeamGoals } = match;
     const { awayTeamGoals } = match;
-    const homeTeamName = match.homeTeam.teamName;
-    teams[homeTeamName] = generateTeamsIfNotExist(teams, homeTeamName);
+    const homeTeamName = match.homeTeam?.teamName;
+    if (homeTeamName) {
+      teams[homeTeamName] = generateTeamsIfNotExist(teams, homeTeamName);
 
-    teams[homeTeamName].totalGames += 1;
+      teams[homeTeamName].totalGames += 1;
 
-    incrementHomeTeamResult({
-      teams,
-      homeTeamName,
-      homeTeamGoals,
-      awayTeamGoals,
-      awayTeamName: '' });
+      incrementHomeTeamResult({
+        teams,
+        homeTeamName,
+        homeTeamGoals,
+        awayTeamGoals,
+        awayTeamName: '' });
+    }
   });
 
   return Object.values(teams);
@@ -147,17 +150,19 @@ export const transformAwayTeam = (jogos: IMatchesModel[], team: ITeam[]): Leader
   matches.forEach((match) => {
     const { homeTeamGoals } = match;
     const { awayTeamGoals } = match;
-    const awayTeamName = match.awayTeam.teamName;
-    teams[awayTeamName] = generateTeamsIfNotExist(teams, awayTeamName);
+    const awayTeamName = match.awayTeam?.teamName;
+    if (awayTeamName) {
+      teams[awayTeamName] = generateTeamsIfNotExist(teams, awayTeamName);
 
-    teams[awayTeamName].totalGames += 1;
+      teams[awayTeamName].totalGames += 1;
 
-    incrementAwayTeamResult({
-      teams,
-      awayTeamName,
-      awayTeamGoals,
-      homeTeamGoals,
-      homeTeamName: '' });
+      incrementAwayTeamResult({
+        teams,
+        awayTeamName,
+        awayTeamGoals,
+        homeTeamGoals,
+        homeTeamName: '' });
+    }
   });
 
   return Object.values(teams);

@@ -4,11 +4,17 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
+  NonAttribute,
 } from 'sequelize';
 import db from '.';
 // import OtherModel from './OtherModel';
 
 import SequelizeTeamModel from './TeamModel';
+
+type HomeAwayTeam = {
+  id?: number,
+  teamName: string,
+};
 
 class SequelizeMatchModel extends Model<InferAttributes<SequelizeMatchModel>,
 InferCreationAttributes<SequelizeMatchModel>> {
@@ -23,6 +29,10 @@ InferCreationAttributes<SequelizeMatchModel>> {
   declare awayTeamGoals: number;
 
   declare inProgress: boolean;
+
+  declare homeTeam: NonAttribute<HomeAwayTeam>;
+
+  declare awayTeam: NonAttribute<HomeAwayTeam>;
 }
 
 SequelizeMatchModel.init({

@@ -11,8 +11,8 @@ export interface IMatches {
 }
 
 export interface IMatchesModel extends IMatches {
-  homeTeam: Pick<ITeam, 'teamName'>,
-  awayTeam: Pick<ITeam, 'teamName'>,
+  homeTeam: Pick<ITeam, 'teamName'> | undefined,
+  awayTeam: Pick<ITeam, 'teamName'> | undefined,
 }
 
 export interface IReaderMatchType extends ICRUDModelReader<IMatches> {
