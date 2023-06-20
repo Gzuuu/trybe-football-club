@@ -1,5 +1,4 @@
-import ITeam from '../../Interfaces/TeamMigrates';
-
+// import ITeam from '../../Interfaces/TeamMigrates';
 export const teamMock = [
   {
     "id": 1,
